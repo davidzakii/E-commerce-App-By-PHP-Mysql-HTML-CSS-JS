@@ -1,15 +1,18 @@
 <?php 
-if($_GET['user_Id']){
-  $user_Id = $_GET['user_Id'];
-}else {
-  echo "<h1 style='text-align:center;margin-top:50%'>Wrong page!!</h1>";
-  die();
-}
-
 include_once './Inc/config.php';
-$userQuery = "SELECT * FROM users WHERE `user_Id`= '$user_Id'";
-$userResult = $connect->query($userQuery);
-$user = $userResult->fetch(PDO::FETCH_ASSOC);
+session_start();
+if(!isset($_SESSION['user_Id'])&&!isset($_COOKIE['user_Id'])){
+  header('location: LoginPage.php');
+}
+if(isset($_SESSION['user_Id'])){
+  $user_Id = $_SESSION['user_Id'];
+}
+if(isset($_COOKIE['user_Id'])){
+  $user_Id = $_COOKIE['user_Id'];
+}
+  $userQuery = "SELECT * FROM users WHERE `user_Id`= '$user_Id'";
+  $userResult = $connect->query($userQuery);
+  $user = $userResult->fetch(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -25,10 +28,10 @@ $user = $userResult->fetch(PDO::FETCH_ASSOC);
 
       <div>
         <ul id="navbar">
-          <li><a id="btnHome" href="home.php?user_Id=<?php echo $user['user_Id'];?>">Home</a></li>
-          <li><a id="btnShop" href="shop.php?user_Id=<?php echo $user['user_Id'];?>">Shop</a></li>
+          <li><a id="btnHome" href="home.php">Home</a></li>
+          <li><a id="btnShop" href="shop.php">Shop</a></li>
           <li id="lg-bag">
-            <a class="active" href="cart.php?user_Id=<?php echo $user['user_Id'];?>"
+            <a class="active" href="cart.php"
               ><i class="fa fa-shopping-bag"></i
             ></a>
           </li>
@@ -36,7 +39,7 @@ $user = $userResult->fetch(PDO::FETCH_ASSOC);
         </ul>
       </div>
       <div id="mobile">
-        <a class="active" href="cart.html"
+        <a class="active" href="cart.php"
           ><i class="fa fa-shopping-bag"></i
         ></a>
         <i id="bar" class="fas fa-outdent"></i>

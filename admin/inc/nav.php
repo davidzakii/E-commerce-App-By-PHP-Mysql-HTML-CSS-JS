@@ -1,10 +1,21 @@
-
+<?php 
+session_start();
+if(!isset($_SESSION['user_Id'])&&!isset($_COOKIE['user_Id'])){
+  header('location: ../LoginPage.php');
+}
+if(isset($_SESSION['user_Id'])){
+  $user_Id = $_SESSION['user_Id'];
+}
+if(isset($_COOKIE['user_Id'])){
+  $user_Id = $_COOKIE['user_Id'];
+}
+?>
         <nav class="navbar top-navbar navbar-expand-md navbar-dark">
           <div class="navbar-header" data-logobg="skin5">
             <!-- ============================================================== -->
             <!-- Logo -->
             <!-- ============================================================== -->
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="index.php">
               <!-- Logo icon -->
               <b class="logo-icon ps-2">
                 <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
@@ -129,7 +140,7 @@
                     Setting</a
                   >
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="javascript:void(0)"
+                  <a class="dropdown-item" href="../LogOutPage.php"
                     ><i class="fa fa-power-off me-1 ms-1"></i> Logout</a
                   >
                   <div class="dropdown-divider"></div>

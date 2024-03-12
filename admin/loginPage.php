@@ -1,31 +1,17 @@
 <?php
 include_once './Inc/config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $email = $_POST["email"];
-  $password = sha1($_POST["password"]);
   $rememberMe = $_POST['rememberMe'];
-  // Query to check if the user exists in the database
-  try {
-    $sql = "SELECT * FROM users WHERE email = '$email' AND `password` = '$password'";
-    $result = $connect->query($sql);
-    if($result->rowCount() > 0){
-            // User exists, redirect to home page
-            if($rememberMe){
-              $user = $result->fetch(PDO::FETCH_ASSOC);
-              $user_Id = $user['user_Id'];
-              setcookie('user_Id',$user_Id,time()+10000);
-              header("Location: home.php");
-            }else {
-              $user = $result->fetch(PDO::FETCH_ASSOC);
-              $user_Id = $user['user_Id'];
-              session_start();
-              $_SESSION['user_Id'] = $user_Id;
-              header("Location: home.php");
-            }
-
+  if($_POST['email']=='admin'&&sha1($_POST['password'])==sha1('1234567')){
+    $pass = sha1('1234567');
+    if($rememberMe){
+      setcookie('user_Id',$pass,time()+10000);
+      header("Location: products/index.php");
+    }else {
+      session_start();
+      $_SESSION['user_Id'] = $pass;
+      header("Location: products/index.php");
     }
-  }catch (PDOException $e){
-    echo 'ERORR!! '.$e->getMessage();
   }
 }
  ?>
@@ -111,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <body>
     <form id="loginForm" method="post">
       <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required />
+      <input type="text" id="email" name="email" required />
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required />
       <div class="remember-me">

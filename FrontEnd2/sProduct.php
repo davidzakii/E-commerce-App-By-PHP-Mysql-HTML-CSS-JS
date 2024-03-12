@@ -1,8 +1,17 @@
-<?php 
-if(isset($_GET['Id'])&&isset($_GET['user_Id'])){
+<?php
+session_start();
+if(!isset($_SESSION['user_Id'])&&!isset($_COOKIE['user_Id'])){
+  header('location: LoginPage.php');
+}
+if(isset($_GET['Id'])){
   //echo $_GET['Id'];
 $Id = $_GET['Id'];
-$user_Id = $_GET['user_Id'];
+if(isset($_SESSION['user_Id'])){
+  $user_Id = $_SESSION['user_Id'];
+}
+if(isset($_COOKIE['user_Id'])){
+  $user_Id = $_COOKIE['user_Id'];
+}
 }else {
   echo "<h2 align='center'>Wrong Page</h2>";
   die();
@@ -31,8 +40,8 @@ $user = $userResult->fetch(PDO::FETCH_ASSOC);
 
       <div>
         <ul id="navbar">
-          <li><a id="btnHome" href="./home.php?user_Id=<?php echo $user_Id ?>">Home</a></li>
-          <li><a id="btnCart" class="active" href="./shop.php?user_Id=<?php echo $user_Id ?>">Shop</a></li>
+          <li><a id="btnHome" href="./home.php">Home</a></li>
+          <li><a id="btnCart" class="active" href="./shop.php">Shop</a></li>
           <li id="lg-bag">
             <a href="cart.php"><i class="fa fa-shopping-bag"></i></a>
           </li>

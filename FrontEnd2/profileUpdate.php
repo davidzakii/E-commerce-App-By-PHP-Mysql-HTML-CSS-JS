@@ -1,11 +1,15 @@
 <?php 
- if($_GET['user_Id']){
-    $user_Id = $_GET['user_Id'];
- }else {
-    echo "<h1 style='text-align:center;margin-top:50%'>Wrong page!!</h1>";
-    die();
- }
 include_once './Inc/config.php';
+session_start();
+if(!isset($_SESSION['user_Id'])&&!isset($_COOKIE['user_Id'])){
+  header('location: LoginPage.php');
+}
+if(isset($_SESSION['user_Id'])){
+  $user_Id = $_SESSION['user_Id'];
+}
+if(isset($_COOKIE['user_Id'])){
+  $user_Id = $_COOKIE['user_Id'];
+}
   $userQuery = "SELECT * FROM `users` WHERE `user_Id`=$user_Id";
   $userResult = $connect->query($userQuery);
   $user = $userResult->fetch(PDO::FETCH_ASSOC);
@@ -234,7 +238,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         disabled
       />
       <div class="go-login-page">
-        <a href="home.php?user_Id=<?php echo $user_Id ?>">go to Home page</a>
+        <a href="home.php">go to Home page</a>
       </div>
     </form>
 

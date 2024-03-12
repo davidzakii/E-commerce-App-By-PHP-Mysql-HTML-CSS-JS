@@ -1,19 +1,23 @@
 <?php
-if($_GET['user_Id']){
-  $user_Id = $_GET['user_Id'];
-}else {
-  echo "<h1 style='text-align:center;margin-top:50%'>Wrong page!!</h1>";
-  die();
+session_start();
+if(!isset($_SESSION['user_Id'])&&!isset($_COOKIE['user_Id'])){
+  header('location: LoginPage.php');
 }
+if(isset($_SESSION['user_Id'])){
+  $user_Id = $_SESSION['user_Id'];
+}
+if(isset($_COOKIE['user_Id'])){
+  $user_Id = $_COOKIE['user_Id'];
+}
+  include_once './Inc/config.php';
+  $productsQuery = 'SELECT * FROM product';
+  $productsResult = $connect->query($productsQuery);
+  $products = $productsResult->fetchAll(PDO::FETCH_ASSOC);
+  
+  $userQuery = "SELECT * FROM users WHERE `user_Id`= '$user_Id'";
+  $userResult = $connect->query($userQuery);
+  $user = $userResult->fetch(PDO::FETCH_ASSOC);
 
-include_once './Inc/config.php';
-$productsQuery = 'SELECT * FROM product';
-$productsResult = $connect->query($productsQuery);
-$products = $productsResult->fetchAll(PDO::FETCH_ASSOC);
-
-$userQuery = "SELECT * FROM users WHERE `user_Id`= '$user_Id'";
-$userResult = $connect->query($userQuery);
-$user = $userResult->fetch(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -23,21 +27,21 @@ $user = $userResult->fetch(PDO::FETCH_ASSOC);
   </head>
   <body>
     <section id="header">
-      <a href="home.php?user_Id=<?php echo $user['user_Id'] ?>">
+      <a href="home.php">
         <img src="img/logo.png" class="logo" alt="" />
       </a>
       <div>
         <ul id="navbar">
-          <li><a class="active" href="home.php?user_Id=<?php echo $user['user_Id'] ?>">Home</a></li>
-          <li><a id="btnShop" href="shop.php?user_Id=<?php echo $user['user_Id'] ?>">Shop</a></li>
+          <li><a class="active" href="home.php">Home</a></li>
+          <li><a id="btnShop" href="shop.php">Shop</a></li>
           <li id="lg-bag">
-            <a id="btnCart" href="cart.php?user_Id=<?php echo $user['user_Id'];?>"><i class="fa fa-shopping-bag"></i></a>
+            <a id="btnCart" href="cart.php"><i class="fa fa-shopping-bag"></i></a>
           </li>
           <a href="#" id="close"><i class="fa-solid fa-xmark"></i></a>
         </ul>
       </div>
       <div id="mobile">
-        <a href="cart.php?user_Id=<?php echo $user['user_Id'];?>"><i class="fa fa-shopping-bag"></i></a>
+        <a href="cart.php"><i class="fa fa-shopping-bag"></i></a>
         <i id="bar" class="fas fa-outdent"></i>
       </div>
     </section>
@@ -104,7 +108,7 @@ $user = $userResult->fetch(PDO::FETCH_ASSOC);
         const productId = document.querySelectorAll('#product1 .pro .productId');
         for(let i=0;i<pro.length;i++){
           pro[i].addEventListener('click',function(){
-            window.location.href = `./sProduct.php?Id=${productId[i].textContent}&user_Id=<?php echo $user['user_Id'] ?>`;
+            window.location.href = `./sProduct.php?Id=${productId[i].textContent}`;
           })
         }
       });
