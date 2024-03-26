@@ -11,6 +11,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $ext=end($imageArr);
     $ext=strtolower($ext);
     $allowedExt=['jpg','png','jpeg','bmp'];
+    $timeImage = time().$image;
     checkExt($ext,$allowedExt);
   }
   $password = sha1($_POST['password']);
@@ -25,9 +26,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     if(empty($image)){
       $query = "INSERT INTO `users` ( `user_name`, `email`, `password`)  VALUES ('$userName','$email','$password') ";
     }else {
-      copy($tmp_name,"../admin/assets/users/$image");
-      copy($tmp_name,"./img/users/$image");
-      $query = "INSERT INTO `users` ( `user_name`, `email`, `password`,`image`)  VALUES ('$userName','$email','$password','$image')";
+      copy($tmp_name,"../admin/assets/users/".$timeImage);
+      copy($tmp_name,"./img/users/".$timeImage);
+      $query = "INSERT INTO `users` ( `user_name`, `email`, `password`,`image`)  VALUES ('$userName','$email','$password','$timeImage')";
     }
     
     try{

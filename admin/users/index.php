@@ -3,7 +3,6 @@ include_once '../inc/config.php';
 $query = "SELECT * FROM Users";
 $result = $connect->query($query);
 $users = $result->fetchAll(PDO::FETCH_ASSOC);
-// var_dump($users);
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">

@@ -10,45 +10,64 @@ include '../inc/validate.php';
 $query = "SELECT * FROM product WHERE Id = $Id";
 $res = $connect->query($query);
 $product = $res->fetch(PDO::FETCH_ASSOC);
-
 if($_SERVER['REQUEST_METHOD']=="POST") {
   //$product_id=$_POST['Product_ID'];
   $name=$_POST['productName'];
   $category=$_POST['category'];
   $description=$_POST['description'];
   $price=$_POST['price'];
-  checkBeNumber($price);
+  checkBeNumber($price);;
+  
   $image=$_FILES['image']['name'];
-  $tmp=$_FILES['image']['tmp_name'];
-  $imageArr=explode(".",$image);
-  $ext=end($imageArr);
-  $ext=strtolower($ext);
-  $allowedExt=['jpg','png','jpeg','bmp'];
-  checkExt($ext,$allowedExt);
+  if(!empty($image)){
+    $tmp=$_FILES['image']['tmp_name'];
+    $imageArr=explode(".",$image);
+    $ext=end($imageArr);
+    $ext=strtolower($ext);
+    $allowedExt=['jpg','png','jpeg','bmp'];
+    checkExt($ext,$allowedExt);
+  }
+
   if(empty($errors)){
-    $UpdateQuery = "UPDATE `product` SET 
+    if(empty($image)){
+      $UpdateQuery = "UPDATE `product` SET 
+                `name` = :pname,
+                `category` = :pcategory,
+                `description` = :pdescription,
+                `price` = :price
+                WHERE `Id` = :Id";
+    }else {
+      $UpdateQuery = "UPDATE `product` SET 
                 `name` = :pname,
                 `image` = :pimage,
                 `category` = :pcategory,
                 `description` = :pdescription,
                 `price` = :price
                 WHERE `Id` = :Id";
+    }
+    
     try {
       //$ress=$connect->query($UpdateQuery);
+      $timeImage = time().$image;
       $stmt = $connect->prepare($UpdateQuery);
-      $stmt->bindParam(':Id', $Id, PDO::PARAM_STR);
+      $stmt->bindParam(':Id', $Id, PDO::PARAM_INT);
       $stmt->bindParam(':pname', $name, PDO::PARAM_STR);
-      $stmt->bindParam(':pimage', $image, PDO::PARAM_STR);
+      if(!empty($image)){
+        $stmt->bindParam(':pimage', $timeImage, PDO::PARAM_STR);
+      }
       $stmt->bindParam(':pcategory', $category, PDO::PARAM_STR);
       $stmt->bindParam(':pdescription', $description, PDO::PARAM_STR);
       $stmt->bindParam(':price', $price, PDO::PARAM_STR);
       $stmt->execute();
-      if($stmt){
-      $oldImagePath = '../assets/products/images/'.$product['image'];
+      if(isset($stmt)&&!empty($image)){
+      $proImage = $product['image'];
+      $oldImagePath = "../assets/products/images/$proImage";
         if (file_exists($oldImagePath)&&$image!=$product['image']) {
             unlink($oldImagePath);
+            unlink("../../FrontEnd2/img/products/$proImage");
         }
-        move_uploaded_file($tmp,"../assets/products/images/".$image);
+        copy($tmp,"../assets/products/images/".$timeImage);
+        copy($tmp,"../../FrontEnd2/img/products/".$timeImage);
       }
     }catch(Exception $e){
       echo $e->getMessage();
@@ -114,7 +133,7 @@ if($_SERVER['REQUEST_METHOD']=="POST") {
           <div class="row">
             <div class="col-md-12">
               <div class="card">
-              <form enctype="multipart/form-data" class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])."?Id=$Id"; ?>">
+              <form enctype="multipart/form-data" class="form-horizontal" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']).'?Id='.$Id; ?>">
                   <div class="card-body">
                     <h4 class="card-title">Edit Product</h4>
                     <div class="form-group row">
@@ -147,7 +166,6 @@ if($_SERVER['REQUEST_METHOD']=="POST") {
                           name='image'
                           id="image"
                           value="<?php echo $product['image'] ?>"
-                          required
                         />
                       </div>
                     </div>

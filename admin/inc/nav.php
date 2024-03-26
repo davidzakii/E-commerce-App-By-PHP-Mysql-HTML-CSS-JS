@@ -1,14 +1,18 @@
 <?php 
 session_start();
-if(!isset($_SESSION['user_Id'])&&!isset($_COOKIE['user_Id'])){
+if(!isset($_SESSION['Id'])&&!isset($_COOKIE['Id'])){
   header('location: ../LoginPage.php');
 }
-if(isset($_SESSION['user_Id'])){
-  $user_Id = $_SESSION['user_Id'];
+if(isset($_SESSION['Id'])){
+  $adminId = $_SESSION['Id'];
 }
-if(isset($_COOKIE['user_Id'])){
-  $user_Id = $_COOKIE['user_Id'];
+if(isset($_COOKIE['Id'])){
+  $adminId = $_COOKIE['Id'];
 }
+include '../inc/config.php';
+$query = "SELECT * FROM `admin` WHERE `id`='$adminId'";
+$result = $connect->query($query);
+$admin = $result->fetch(PDO::FETCH_ASSOC);
 ?>
         <nav class="navbar top-navbar navbar-expand-md navbar-dark">
           <div class="navbar-header" data-logobg="skin5">
@@ -124,6 +128,9 @@ if(isset($_COOKIE['user_Id'])){
                 <ul
                   class="dropdown-menu dropdown-menu-end user-dd animated"
                   aria-labelledby="navbarDropdown"
+                >
+                <a class="dropdown-item" href="javascript:void(0)"
+                    ><i class="mdi mdi-account me-1 ms-1"></i><?php echo $admin['name'] ?></a
                 >
                   <a class="dropdown-item" href="javascript:void(0)"
                     ><i class="mdi mdi-account me-1 ms-1"></i> My Profile</a

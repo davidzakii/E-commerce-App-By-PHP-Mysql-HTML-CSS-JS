@@ -34,7 +34,7 @@ if(isset($_COOKIE['user_Id'])){
           <li><a id="btnHome"  href="home.php">Home</a></li>
           <li><a id="btnShop" class="active" href="shop.php">Shop</a></li>
           <li id="lg-bag">
-            <a id="btnCart" href="cart.php"><i class="fa fa-shopping-bag"></i></a>
+            <a id="btnCart" href="cart.php"><i class="fa fa-shopping-bag"></i> <span id="cartItemCount"></span></a>
           </li>
           <a href="#" id="close"><i class="fa-solid fa-xmark"></i></a>
         </ul>
@@ -54,10 +54,10 @@ if(isset($_COOKIE['user_Id'])){
       <div class="pro-container">
         <?php foreach($products as $product) { ?>
           <div class="pro">
-          <img src="../admin/assets/products/images/<?php echo $product['image']?>" alt="" />
+          <img src="./img/products/<?php echo $product['image']?>" alt="" />
           <div class="des">
             <span><?php echo $product['category']?></span>
-            <h5><?php echo $product['description']?></h5>
+            <h5><?php echo $product['name']?></h5>
             <div class="star">
               <i class="fas fa-star"></i>
               <i class="fas fa-star"></i>
@@ -68,7 +68,13 @@ if(isset($_COOKIE['user_Id'])){
             <h4><?php echo $product['price']?></h4>
             <h1 class="productId" style="display: none;"><?php echo $product['Id']?></h1>
           </div>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+          <a href="#" class="addCart" 
+           data-id="<?php echo $product['Id']; ?>"
+           data-title="<?php echo $product['name']; ?>"
+           data-price="<?php echo $product['price']; ?>"
+           data-image="./img/products/<?php echo $product['image']?>">
+           <i class="fa-solid fa-cart-shopping"></i>
+          </a>
         </div>
         <?php } ?>
       </div>
@@ -95,6 +101,59 @@ if(isset($_COOKIE['user_Id'])){
             window.location.href = `./sProduct.php?Id=${productId[i].textContent}`;
           })
         }
+        
+        const cartItemCount = document.getElementById('cartItemCount');
+        const addCartButtons = document.querySelectorAll('.addCart');
+        const user_Id = <?php echo json_encode($user_Id); ?>;
+        const cart = JSON.parse(localStorage.getItem(`cart_${user_Id}`)) || [];
+          addCartButtons.forEach((button) => {
+            button.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  // Extract product information from data attributes
+                  const productId = button.dataset.id;
+                  const title = button.dataset.title;
+                  const price = button.dataset.price;
+                  const image = button.dataset.image;
+                  // Your cart handling logic here
+                  const cartItem = {
+                      id: productId,
+                      title: title,
+                      quantity: 1,
+                      price: price,
+                      image: image
+                  };
+                  // Add the item to the cart
+                  addToCart(cartItem);
+                  alert('Item added to the cart!');
+                  updateCartCount();
+                  event.stopPropagation();
+            });
+          });
+
+          function addToCart(item) {
+            const cart = JSON.parse(localStorage.getItem(`cart_${user_Id}`)) || [];
+            const existingItem = cart.find(cartItem => cartItem.id === item.id);
+            if (existingItem) {
+            // If item already exists in the cart, update quantity and price
+            existingItem.quantity++;
+            } else {
+            // If item doesn't exist in the cart, add it
+            cart.push(item);
+            }
+            // Update the cart in local storage
+            localStorage.setItem(`cart_${user_Id}`, JSON.stringify(cart));
+          }
+              // Function to update the cart count display
+        function updateCartCount() {
+          const cart = JSON.parse(localStorage.getItem(`cart_${user_Id}`)) || [];
+          const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
+          // Update the cart count element on the page
+          if (cartItemCount) {
+          cartItemCount.textContent = totalCount;
+          }
+        }
+        // Initial update of the cart count when the page loads
+        updateCartCount();
       });
     </script>
   </body>

@@ -11,11 +11,27 @@
  $userQueryResult = $connect->query($userQuery); 
  $user = $userQueryResult->fetch(PDO::FETCH_ASSOC);
  $userImage = $user['image'];
-
  $deleteUserQuery = "DELETE FROM `users` WHERE `user_Id` = $user_Id";
  $res = $connect->query($deleteUserQuery);
- if($res){
+
+ $deleteUserOrderQuery = "DELETE FROM `order` WHERE `user_id` = $user_Id";
+ $deleteOrderResult = $connect->query($deleteUserOrderQuery);
+
+ if($res &&  $deleteOrderResult ){
    unlink("../assets/users/$userImage");
-    header("location: index.php");
- }
+   unlink("../../FrontEnd2/img/users/$userImage");
+   session_start();
+   setcookie('user_Id', '', time() - 1);
+   if(isset($_SESSION['user_Id'])){
+      unset($_SESSION['user_Id']);
+   }
  ?>
+ <script>
+   localStorage.removeItem("<?php echo "cart_$user_Id"?>")
+ </script>
+ <?php header("location: index.php"); ?>
+ <?php }else {
+   echo "Not Respond";
+   die();
+ } ?>
+ 

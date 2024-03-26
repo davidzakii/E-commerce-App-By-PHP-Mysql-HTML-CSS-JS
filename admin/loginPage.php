@@ -1,17 +1,29 @@
 <?php
-include_once './Inc/config.php';
+include_once './inc/config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $rememberMe = $_POST['rememberMe'];
-  if($_POST['email']=='admin'&&sha1($_POST['password'])==sha1('1234567')){
-    $pass = sha1('1234567');
-    if($rememberMe){
-      setcookie('user_Id',$pass,time()+10000);
-      header("Location: products/index.php");
-    }else {
-      session_start();
-      $_SESSION['user_Id'] = $pass;
-      header("Location: products/index.php");
+  $email = $_POST['email'];
+  $password = sha1($_POST['password']);
+  if(isset($_POST['rememberMe'])){
+    $rememberMe = $_POST['rememberMe'];
+  }
+
+  try {
+    $query = "SELECT * FROM `admin` WHERE `email`='$email' AND `password`='$password'";
+    $result = $connect->query($query);
+    $admin = $result->fetch(PDO::FETCH_ASSOC);
+    if($result->rowCount()>0){
+      $id = $admin['id'];
+      if(isset($rememberMe)){
+        setcookie('Id',$id,time()+10000);
+        header("Location: products/index.php");
+      }else {
+        session_start();
+        $_SESSION['Id'] = $id;
+        header("Location: products/index.php");
+      }
     }
+  }catch (PDOException $e){
+    echo 'ERORR!! '.$e->getMessage();
   }
 }
  ?>
@@ -105,14 +117,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <input type="checkbox" name="rememberMe" id="rememberMe">
       </div>
       <input type="submit" class="input-submit" value="Login" />
-      <div class="go-login-page">
-        <span>if you don't have account </span>
-        <a href="registerPage.php">go to sign up page</a>
-      </div>
     </form>
     <script>
-      <?php     if ($_SERVER["REQUEST_METHOD"] == "POST"&&isset($result)&&$result->rowCount() == 0) { ?>
-      alert("Email or password is not correct.");
+      <?php     if ($_SERVER['REQUEST_METHOD'] == 'POST'&&$result->rowCount()==0){  ?>
+      alert("Admin Not Exist");
       <?php } ?>
     </script>
   </body>

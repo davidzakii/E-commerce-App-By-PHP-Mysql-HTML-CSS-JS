@@ -28,10 +28,10 @@ $products = $result->fetchAll(PDO::FETCH_ASSOC);
       <div class="pro-container">
         <?php foreach($products as $product){ ?>
         <div class="pro">
-          <img src="../admin/assets/products/images/<?php echo $product['image']?>" alt="" />
+          <img src="./img/products/<?php echo $product['image']?>" alt="" />
           <div class="des">
             <span><?php echo $product['category']?></span>
-            <h5><?php echo $product['description']?></h5>
+            <h5><?php echo $product['name']?></h5>
             <div class="star">
               <i class="fas fa-star"></i>
               <i class="fas fa-star"></i>
@@ -39,7 +39,7 @@ $products = $result->fetchAll(PDO::FETCH_ASSOC);
               <i class="fas fa-star"></i>
               <i class="fas fa-star"></i>
             </div>
-            <h4><?php echo $product['price']?></h4>
+            <h4><?php echo $product['price']?>$</h4>
           </div>
           <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
         </div>
@@ -51,140 +51,6 @@ $products = $result->fetchAll(PDO::FETCH_ASSOC);
       <?php include './Inc/banner.php' ?>
     </section>
 
-    <section id="product2" class="section-p1">
-      <h2>New Arrivals</h2>
-      <p>Summer Collection New Modern Design</p>
-      <div class="pro-container">
-        <div class="pro">
-          <img src="img//products/n1.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Carton Astronaut T-shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img//products/n2.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Carton Astronaut T-shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img//products/n3.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Carton Astronaut T-shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img//products/n4.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Carton Astronaut T-shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img//products/n5.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Carton Astronaut T-shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img//products/n6.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Carton Astronaut T-shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img//products/n7.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Carton Astronaut T-shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-        </div>
-        <div class="pro">
-          <img src="img//products/n8.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Carton Astronaut T-shirts</h5>
-            <div class="star">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-            </div>
-            <h4>$78</h4>
-          </div>
-          <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-        </div>
-      </div>
-    </section>
 
     <section id="sm-banner" class="section-p1">
       <?php include './Inc/sm-banner.php' ?>

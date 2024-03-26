@@ -28,15 +28,17 @@ if($_SERVER['REQUEST_METHOD']=="POST") {
     $Queryyy = "INSERT INTO `product` (`name`, `image`, `category`, `description`, `price`) VALUES (:pname, :pimage, :pcategory, :pdescription, :price)";
     try {
       //$ress=$connect->query($Queryyy);
+      $timeImage = time().$image;
       $stmt = $connect->prepare($Queryyy);
       $stmt->bindParam(':pname', $name, PDO::PARAM_STR);
-      $stmt->bindParam(':pimage', $image, PDO::PARAM_STR);
+      $stmt->bindParam(':pimage', $timeImage, PDO::PARAM_STR);
       $stmt->bindParam(':pcategory', $category, PDO::PARAM_STR);
       $stmt->bindParam(':pdescription', $description, PDO::PARAM_STR);
       $stmt->bindParam(':price', $price, PDO::PARAM_STR);
       $stmt->execute();
       if($stmt){
-        move_uploaded_file($tmp,"../assets/products/images/".$image);
+        copy($tmp,"../assets/products/images/".$timeImage);
+        copy($tmp,"../../FrontEnd2//img/products/".$timeImage);
       }
     }catch (PDOException $e) {
       echo "Error: " . $e->getMessage();

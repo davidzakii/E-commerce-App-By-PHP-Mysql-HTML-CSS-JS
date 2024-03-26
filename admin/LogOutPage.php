@@ -1,7 +1,8 @@
 <?php
 session_start();
-setcookie('user_Id', '', time() - 1);
-session_unset();
-session_destroy();
+setcookie('Id', '', time() - 1);
+if(isset($_SESSION['Id'])){
+    unset($_SESSION['Id']);
+ }
 header("location: LoginPage.php");
 ?>

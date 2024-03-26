@@ -15,10 +15,6 @@ if(isset($_COOKIE['user_Id'])){
   $user = $userResult->fetch(PDO::FETCH_ASSOC);
 if($_SERVER['REQUEST_METHOD']=='POST'){
   include_once './Inc/validation.php';
-  // $usersEmailsQuery = 'SELECT `email` FROM users';
-  // $usersEmailsResult = $connect->query($usersEmailsQuery);
-  // $usersEmails = $usersEmailsResult->fetchAll(PDO::FETCH_ASSOC);
-
   $userName = $_POST['userName'];
   $email = $_POST['email'];
   if(!empty($_FILES['image']['name'])){
@@ -28,10 +24,15 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
     $ext=end($imageArr);
     $ext=strtolower($ext);
     $allowedExt=['jpg','png','jpeg','bmp'];
+    $timeImage = time().$image;
     checkExt($ext,$allowedExt);
   }
   $password = sha1($_POST['password']);
   $conPassword = sha1($_POST['confirmPassword']);
+  if($user['password'] == $password){
+    global $errors;
+    $errors['Duplicated Password'] = 'Duplicated Password Please Enter New Password';
+  }
   checkName($userName);
   checkEmail($email);
   if($email == $user['email']){
@@ -60,22 +61,26 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         `user_name` = '$userName',
         `email` = '$email',
         `password` = '$password',
-        `image` = '$image'
+        `image` = '$timeImage'
         WHERE `user_Id` = $user_Id";
       }else {
         if (file_exists("./img/users/".$user['image'])) {
+          if (is_file("./img/users/".$user['image'])) {
           unlink("./img/users/".$user['image']);
+          }
         } 
         if (file_exists("../admin/assets/users/".$user['image'])) {
+          if (is_file("../admin/assets/users/".$user['image'])) {
           unlink("../admin/assets/users/".$user['image']);
+          }
         }
-        copy($tmp_name,'./img/users/'.$image);
-        copy($tmp_name,'../admin/assets/users/'.$image);
+        copy($tmp_name,'./img/users/'.$timeImage);
+        copy($tmp_name,'../admin/assets/users/'.$timeImage);
         $updateQuery = "UPDATE `users` SET 
         `user_name` = '$userName',
         `email` = '$email',
         `password` = '$password',
-        `image` = '$image'
+        `image` = '$timeImage'
         WHERE `user_Id` = $user_Id";
       }
     }

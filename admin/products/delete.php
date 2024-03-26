@@ -16,6 +16,7 @@
  $deleteOrderResult = $connect->query($deleteOrderQuery);
  if($res){
    unlink("../assets/products/images/$imageName");
+   unlink("../../FrontEnd2/img/products/$imageName");
     header("location: index.php");
  }
  ?>

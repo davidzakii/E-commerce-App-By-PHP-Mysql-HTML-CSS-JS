@@ -8,12 +8,8 @@
           <li>
             <a href="#" onclick="alert('please login to get more feature')"
               >Shop</a
-            >
+            > 
           </li>
-          <!-- <li><a href="cart.html">cart</a></li> -->
-          <!-- <li><a href="blog.html">Blog</a></li>
-          <li><a href="abput.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li> -->
           <li id="lg-bag">
             <a href="#" onclick="alert('please login to get more feature')"
               ><i class="fa fa-shopping-bag"></i

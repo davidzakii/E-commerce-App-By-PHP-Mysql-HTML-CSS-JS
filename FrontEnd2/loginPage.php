@@ -3,14 +3,16 @@ include_once './Inc/config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $email = $_POST["email"];
   $password = sha1($_POST["password"]);
-  $rememberMe = $_POST['rememberMe'];
+  if(isset($_POST['rememberMe'])){
+    $rememberMe = $_POST['rememberMe'];
+  }
   // Query to check if the user exists in the database
   try {
     $sql = "SELECT * FROM users WHERE email = '$email' AND `password` = '$password'";
     $result = $connect->query($sql);
     if($result->rowCount() > 0){
             // User exists, redirect to home page
-            if($rememberMe){
+            if(isset($rememberMe)){
               $user = $result->fetch(PDO::FETCH_ASSOC);
               $user_Id = $user['user_Id'];
               setcookie('user_Id',$user_Id,time()+10000);
