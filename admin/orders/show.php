@@ -7,7 +7,7 @@ $code = $_GET['code'];
     die();
 }
 include_once '../inc/config.php';
-$query = "SELECT `order`.code, `order`.`date`, product.name AS product_name, product.price, users.user_name FROM `order` LEFT JOIN product ON `order`.product_id = product.Id LEFT JOIN users ON `order`.user_id = users.user_Id WHERE code =$code;";
+$query = "SELECT `order`.code, `order`.`date`, product.name AS product_name, product.price, users.user_name,isPaid,delivered FROM `order` LEFT JOIN product ON `order`.product_id = product.Id LEFT JOIN users ON `order`.user_id = users.user_Id WHERE code =$code;";
 $result = $connect->query($query);
 $order = $result->fetch(PDO::FETCH_ASSOC);
 // var_dump($product);
@@ -95,6 +95,28 @@ $order = $result->fetch(PDO::FETCH_ASSOC);
                           <th>User Name</th>
                           <td><?php echo $order['user_name'] ?></td>
                         </tr>
+                        <tr>
+                          <th>Is Paid</th>
+                          <td><?php echo $order['isPaid'] ?></td>
+                          <td>
+                            <?php if($order['isPaid'] == 0){ ?>
+                              <button id="btnPaid" class="btn btn-danger">NoPaid</button>
+                            <?php }else { ?>
+                              <button id="btnPaid" class="btn btn-success">Paid</button>
+                            <?php }?>
+                        </td>
+                        </tr>
+                        <tr>
+                          <th>Diliverd</th>
+                          <td><?php echo $order['delivered'] ?></td>
+                          <td>
+                            <?php if($order['delivered']==0){ ?>
+                              <button id="btnDiliverd" class="btn btn-danger">NoDiliverd</button>
+                            <?php }else { ?>
+                              <button id="btnDiliverd" class="btn btn-success">Diliverd</button>
+                            <?php } ?>
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -109,5 +131,43 @@ $order = $result->fetch(PDO::FETCH_ASSOC);
       </div>
     </div>
     <?php include '../inc/scripts.php'; ?>
+    <script>
+    var code = <?php echo json_encode($order['code']); ?>;
+    var isPaid = <?php echo $order['isPaid']; ?>;
+    var isDelivered = <?php echo $order['delivered']; ?>;
+
+    function updateOrder(code, isPaid, isDelivered) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "update_order.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Refresh the page after updating the order
+                window.location.reload();
+            }
+        };
+        xhr.send("code=" + code + "&isPaid=" + isPaid + "&isDelivered=" + isDelivered);
+    }
+
+    var btnPaid = document.getElementById('btnPaid');
+    var btnDiliverd = document.getElementById('btnDiliverd');
+
+    btnPaid.addEventListener('click', function() {
+        isPaid = isPaid ? 0 : 1; // Toggle isPaid value
+        btnPaid.innerText = isPaid ? "Paid" : "NoPaid"; // Update button text
+        btnPaid.classList.toggle('btn-success'); // Toggle button class
+        btnPaid.classList.toggle('btn-danger'); // Toggle button class
+        updateOrder(code, isPaid, isDelivered);
+    });
+
+    btnDiliverd.addEventListener('click', function() {
+        isDelivered = isDelivered ? 0 : 1; // Toggle isDelivered value
+        btnDiliverd.innerText = isDelivered ? "Delivered" : "NoDelivered"; // Update button text
+        btnDiliverd.classList.toggle('btn-success'); // Toggle button class
+        btnDiliverd.classList.toggle('btn-danger'); // Toggle button class
+        updateOrder(code, isPaid, isDelivered);
+    });
+</script>
+
   </body>
 </html>

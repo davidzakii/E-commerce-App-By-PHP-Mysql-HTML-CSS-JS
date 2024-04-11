@@ -1,6 +1,6 @@
 <?php 
 include_once '../inc/config.php'; 
-$query = "SELECT `order`.code, `order`.`date`, product.name AS product_name, product.price, users.user_name FROM `order` LEFT JOIN product ON `order`.product_id = product.Id LEFT JOIN users ON `order`.user_id = users.user_Id;";
+$query = "SELECT `order`.code, `order`.`date`, product.name AS product_name, product.price, users.user_name,isPaid,delivered FROM `order` LEFT JOIN product ON `order`.product_id = product.Id LEFT JOIN users ON `order`.user_id = users.user_Id;";
 $result = $connect->query($query);
 $orders = $result->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -81,6 +81,8 @@ $orders = $result->fetchAll(PDO::FETCH_ASSOC);
                           <th>Product Name</th>
                           <th>Product Price</th>
                           <th>User Name</th>
+                          <th>IsPaid</th>
+                          <th>delivered</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -92,6 +94,8 @@ $orders = $result->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php  echo $order['product_name'] ?></td>
                                 <td><?php  echo $order['price'] ?></td>
                                 <td><?php  echo $order['user_name'] ?></td>
+                                <td><?php  echo $order['isPaid'] ?></td>
+                                <td><?php  echo $order['delivered'] ?></td>
                                 <td style="display: flex;gap:5px;width: 100%;height:100%">
                                 <a href="show.php?code=<?php echo $order['code'] ?>" class="btn btn-primary">Show</a>
                                 <a href="edit.php?code=<?php echo $order['code'] ?>" class="btn btn-success">Edit</a>
@@ -107,6 +111,8 @@ $orders = $result->fetchAll(PDO::FETCH_ASSOC);
                           <th>Product Name</th>
                           <th>Product Price</th>
                           <th>User Name</th>
+                          <th>IsPaid</th>
+                          <th>delivered</th>
                         </tr>
                       </tfoot>
                     </table>

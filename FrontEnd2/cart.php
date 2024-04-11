@@ -88,6 +88,9 @@ if(isset($_COOKIE['user_Id'])){
       <?php include './Inc/newsletter.php' ?>
     </section>
 
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
+    <div id="paypal-button-container"></div>
+
     <footer class="section-p1">
       <?php include './Inc/footer.php' ?>
     </footer>
@@ -123,6 +126,7 @@ if(isset($_COOKIE['user_Id'])){
           cartTableBody.appendChild(row);
           updateCartCount();
           attachQuantityChangeListeners();
+          
         });
       }
 
@@ -177,6 +181,57 @@ if(isset($_COOKIE['user_Id'])){
                 displayCart(); // Update the displayed cart
             }
         }
+
+        paypal.Buttons({
+          createOrder: function(data, actions) {
+            // Set up the transaction details
+            return actions.order.create({
+              purchase_units: [{
+              amount: {
+              value: '10.00' // Total amount
+              }
+              }]
+            });
+          },
+          onApprove: function(data, actions) {
+            // Capture the transaction when the customer approves the payment
+            return actions.order.capture().then(function(details) {
+            // Handle successful payment
+            });
+          }
+        }).render('#paypal-button-container');
+
+        // Stripe integration
+        document.getElementById('checkout-button').addEventListener('click', function() {
+        // Call your server-side code to create a Stripe Checkout Session
+        fetch('/create-checkout-session', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            items: [
+            { id: 'item1', quantity: 1 },
+            { id: 'item2', quantity: 2 }
+            ]
+            })
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(session) {
+        // Redirect to Stripe Checkout
+            return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(function(result) {
+        if (result.error) {
+        // Handle errors
+        }
+        })
+        .catch(function(error) {
+        console.error('Error:', error);
+        });
+        });
     </script>
   </body>
 </html>

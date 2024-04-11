@@ -2,10 +2,9 @@
         <img class="logo" src="img/logo.png" alt="" />
         <h4>Contact</h4>
         <p>
-          <strong>Address: </strong>562 Wellington Road , Street 32,
-          SanFranciscs
+          <strong>Address: </strong>Minia , Mallawi
         </p>
-        <p><strong>Phone:</strong>+01 2222 365 /(+91) 01 2345 6789</p>
+        <p><strong>Phone:</strong>+20 1025190371</p>
         <p><strong>Hours:</strong>10:00 - 18:00, Mon - sat</p>
         <div class="follow">
           <h4>Follow us</h4>
@@ -28,7 +27,7 @@
       </div>
       <div class="col">
         <h4>My Account</h4>
-        <a href="#">Sign In</a>
+        <a href="../../../projectPHP/FrontEnd2/loginPage.php">Sign In</a>
         <a href="#">View Cart</a>
         <a href="#">My wishlist</a>
         <a href="#">Track My Order</a>
